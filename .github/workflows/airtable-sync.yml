@@ -46,7 +46,7 @@ jobs:
 
       # 4. Esegui lo script di sincronizzazione
       - name: Sincronizza Dati da Airtable
-        run: node sync.js
+        run: node sync.cjs # <-- MODIFICA APPLICATA QUI
         env:
           # Questo è il passaggio chiave: inietta il secret di GitHub
           # nello script come variabile d'ambiente.
