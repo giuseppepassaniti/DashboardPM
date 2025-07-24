@@ -1,1 +1,21 @@
+/*
+  Questo file è l'entry point per tutti gli stili della nostra applicazione.
+  Queste tre direttive speciali "@tailwind" vengono processate dallo strumento
+  di build (come Vite o Create React App) e sostituite con tutto il codice CSS
+  generato da Tailwind.
+*/
+
+/* 1. Inietta gli stili di base di Tailwind (reset, stili per tag html, etc.) */
+@tailwind base;
+
+/* 2. Inietta le classi dei componenti di Tailwind (es. .container) */
+@tailwind components;
+
+/* 3. Inietta tutte le classi di utility di Tailwind (es. .text-center, .p-4, .bg-blue-600) */
+@tailwind utilities;
+
+/*
+  Puoi aggiungere qui sotto eventuali stili CSS personalizzati che vuoi
+  siano disponibili in tutta l'applicazione. Per ora, non ne abbiamo bisogno.
+*/
 /* Tailwind base styles */
