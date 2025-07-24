@@ -1,0 +1,1 @@
+// Mostra un KPI base

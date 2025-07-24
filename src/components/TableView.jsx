@@ -1,0 +1,1 @@
+// Tabella dati dinamica per ogni sezione

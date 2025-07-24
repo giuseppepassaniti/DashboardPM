@@ -1,0 +1,1 @@
+// Script Node.js per Airtable → JSON (da completare con ID e API key)
