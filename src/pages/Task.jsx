@@ -1,16 +1,17 @@
-// Pagina con taskimport React, { useState, useEffect, useMemo, useRef } from 'react';
+import React, { useState, useEffect, useMemo, useRef } from 'react';
 import dayjs from 'dayjs';
-import Gantt from 'frappe-gantt';
+import Gantt from 'frappe-gantt'; // <-- RIGA AGGIUNTA
 import { ArrowLeft, Flame } from 'lucide-react';
 
-// 1. Importiamo i dati dei task
+// Importiamo i dati dei task
 import allTasksData from '../data/task.json';
 
 // --- Funzioni di Utility ---
 const parseItalianDate = (d) => d ? dayjs(d, 'DD/MM/YYYY') : null;
 const parseFloatWithComma = (n) => typeof n === 'string' ? parseFloat(n.replace(',', '.')) || 0 : 0;
-const parsePercentage = (p) => typeof p === 'string' ? parseInt(p.replace('%', ''), 10) || 0;
+const parsePercentage = (p) => typeof p === 'string' ? parseInt(p.replace('%', ''), 10) || 0 : 0;
 
+// (Il resto del codice rimane identico a prima...)
 // --- Componente Tabella ---
 const TaskTable = ({ tasks, onSort, sortConfig }) => {
     const getStatusInfo = (task) => {
