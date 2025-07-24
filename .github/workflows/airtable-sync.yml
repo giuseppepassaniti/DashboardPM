@@ -1,0 +1,20 @@
+name: Sync Airtable
+
+on:
+  schedule:
+    - cron: '0 6,12,18 * * *'   # 3 volte al giorno
+  workflow_dispatch:            # Permette di avviarla manualmente
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+      - name: Install dependencies
+        run: npm install
+      - name: Run sync script
+        run: node sync.js
