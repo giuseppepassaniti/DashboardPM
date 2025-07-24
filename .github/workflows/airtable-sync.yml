@@ -1,20 +1,74 @@
-name: Sync Airtable
+# Nome del workflow, apparirà nella sezione "Actions" di GitHub
+name: Sincronizzazione Dati Airtable e Deploy
 
+# Definisce quando il workflow deve essere eseguito
 on:
+  # Esegue il workflow ogni 8 ore (3 volte al giorno)
   schedule:
-    - cron: '0 6,12,18 * * *'   # 3 volte al giorno
-  workflow_dispatch:            # Permette di avviarla manualmente
+    - cron: '0 */8 * * *'
+  
+  # Permette di eseguire il workflow manualmente dalla tab "Actions" di GitHub
+  workflow_dispatch:
 
+  # Esegue il workflow ogni volta che fai un "push" sul branch principale (main)
+  push:
+    branches:
+      - main
+
+# Elenco dei "lavori" (jobs) da eseguire. In questo caso, solo uno.
 jobs:
-  sync:
+  build-and-deploy:
+    # Specifica che il job deve girare su una macchina virtuale Ubuntu
     runs-on: ubuntu-latest
+
+    # Definisce i permessi necessari per il deploy su GitHub Pages
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+
+    # Elenco dei passaggi (steps) che compongono il job
     steps:
-      - uses: actions/checkout@v3
+      # 1. Scarica il codice del tuo repository
+      - name: Checkout del codice
+        uses: actions/checkout@v4
+
+      # 2. Installa Node.js (necessario per eseguire lo script e costruire l'app)
       - name: Setup Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
-          node-version: '18'
-      - name: Install dependencies
+          node-version: '20' # Usa una versione recente di Node.js
+          cache: 'npm' # Abilita la cache per velocizzare le installazioni future
+
+      # 3. Installa tutte le dipendenze definite in package.json
+      - name: Installa le dipendenze
         run: npm install
-      - name: Run sync script
+
+      # 4. Esegui lo script di sincronizzazione
+      - name: Sincronizza Dati da Airtable
         run: node sync.js
+        env:
+          # Questo è il passaggio chiave: inietta il secret di GitHub
+          # nello script come variabile d'ambiente.
+          AIRTABLE_API_KEY: ${{ secrets.AIRTABLE_API_KEY }}
+
+      # 5. Costruisce l'applicazione React per la produzione
+      # Questo comando crea la cartella 'dist/' con i file ottimizzati.
+      - name: Build dell'applicazione React
+        run: npm run build
+
+      # 6. Configura GitHub Pages per il deploy
+      - name: Setup GitHub Pages
+        uses: actions/configure-pages@v5
+
+      # 7. Carica i file costruiti (dalla cartella 'dist') come "artefatto"
+      # che GitHub Pages può usare per pubblicare il sito.
+      - name: Carica l'artefatto per il deploy
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: './dist' # La cartella di output di Vite/React
+
+      # 8. Esegue il deploy finale su GitHub Pages
+      - name: Deploy su GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
